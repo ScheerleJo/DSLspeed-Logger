@@ -23,7 +23,7 @@ function writeJSON (data){
     fs.writeFile(fileName, json);   
 }
 function nextTest() {
-    currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours() + 1, currentDate.getMinutes(), 00);
+    let currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours() + 1, currentDate.getMinutes(), 00);
     var nextDate;
     let minutes = currentDate.getMinutes();
     if (minutes < 15) {
@@ -83,77 +83,3 @@ function checkNextTest() {
             break;
     }
 }
-                
-                
-                
-                
-                
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const NetworkSpeed = require('network-speed');
-const testNetworkSpeed = new NetworkSpeed();
-
-const options = {
-    // The hostname where the request would be made
-    hostname: 'https://your-domain-name',
-    // The port of the host
-    port: 80,
-    // The endpoint available for uploading the data stream
-    path: '/speed-checker-upload',
-    // The http methos
-    method: 'POST',
-    headers: {
-      // Format being used. Currently we just send a json file stream
-      'Content-Type': 'application/json',
-    },
-  };
-  
-  async function getNetworkDownloadSpeed() {
-    const baseUrl = 'https://eu.httpbin.org/stream-bytes/500000';
-    const fileSizeInBytes = 500000;
-    const speed = await testNetworkSpeed.checkDownloadSpeed(baseUrl, fileSizeInBytes);
-    console.log(fileSizeInBytes + "B", speed);
-  }
-  
-  function getNetworkUploadSpeed() {
-    const options = {
-      hostname: 'www.google.com',
-      port: 80,
-      path: '/catchers/544b09b4599c1d0200000289',
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const fileSizeInBytes = 5000000
-    const speed = testNetworkSpeed.checkUploadSpeed(options, fileSizeInBytes);
-    console.log(fileSizeInBytes + "B", speed);
-  }
