@@ -2,7 +2,8 @@ const fs = require('fs');
 const lib = require('./module');
 const {exec} = require('child_process');
 
-let lastMinute = false;
+let lastMinute = 0;
+let currentMinute = 0;
 let currentDate;
 
 //? https://nodejs.org/en/docs/guides/timers-in-node/
@@ -10,20 +11,39 @@ let currentDate;
 reloadDateString();
 //testNow();
 
-while(true){
+
+//!Search for timed loop --> intervall in 5 minutes instead of a few milliseconds, so the speedtest can run smoothly
+
+while (true) {
     reloadDateString();
-    if(lastMinute == false && (currentDate.getMinutes() == 0 || currentDate.getMinutes() == 15 || currentDate.getMinutes() == 30 || currentDate.getMinutes() == 45)) {
-        // console.log('current Minue: '+ currentDate.getMinutes());
-        // console.log('last Updated Minute: ' + lastMinute);
-        //lastMinute = currentDate.getMinutes();
-        //checkNextTest();
-        lastMinute = true;
-        console.log("Test Now! " +  currentDate);
-        testNow();
-    } else if (currentDate.getMinutes() == 1 || currentDate.getMinutes() == 16 || currentDate.getMinutes() == 31 || currentDate.getMinutes() == 46) {
-        lastMinute = false;
+    currentMinute = currentDate.getMinutes();
+    if(currentMinute != lastMinute) {
+        console.log(currentMinute);
+
+        lastMinute = currentMinute;
+
+        if(currentMinute == 24) {
+            testNow();
+        }
     }
+
+
 }
+
+// while(true){
+//     reloadDateString();
+//     if(lastMinute == false ){//&& (currentDate.getMinutes() == 0 || currentDate.getMinutes() == 15 || currentDate.getMinutes() == 30 || currentDate.getMinutes() == 45)) {
+//         // console.log('current Minue: '+ currentDate.getMinutes());
+//         // console.log('last Updated Minute: ' + lastMinute);
+//         //lastMinute = currentDate.getMinutes();
+//         //checkNextTest();
+//         lastMinute = true;
+//         console.log("Test Now! " +  currentDate);
+//         testNow();
+//     } else if (currentDate.getMinutes() == 1 || currentDate.getMinutes() == 16 || currentDate.getMinutes() == 31 || currentDate.getMinutes() == 46) {
+//         lastMinute = false;
+//     }
+// }
    
 function reloadDateString() { 
     currentDate = new Date();
@@ -36,8 +56,10 @@ function writeJSON(data) {
     fs.writeFile(fileName, json);   
 }
 
-function testNow (){
-    exec('speed-test -j', (error, stdout,stderr) => {
+async function testNow (){
+    console.log('Test Now!');
+    await exec('speed-test -j', (error, stdout,stderr) => {
+        console.log('Test Run!');
         if (error) {
             console.log(`Etwas ist schiefgelaufen ${error.message}`);
             return;
