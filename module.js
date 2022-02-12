@@ -11,8 +11,6 @@ module.exports ={
     checkNextTest
 }
 
-
-
 let fileName ='results.json';
 let jsonData;
 var currentDate = new Date();
@@ -22,6 +20,7 @@ function writeJSON (data){
     let json = JSON.stringify(data);
     fs.writeFile(fileName, json);   
 }
+
 function nextTest() {
     let currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate(), currentDate.getHours() + 1, currentDate.getMinutes(), 00);
     var nextDate;
@@ -37,6 +36,7 @@ function nextTest() {
     }
     return nextDate;
 }
+
 function checkTest(){
     let timeUntil = nextTest() - currentDate;
    
